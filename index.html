@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f8">
+  <meta name="description" content="A personal IGCSE biology flashcard collection, based on 21 Notion unit summaries.">
+  <title>Biology, recalled.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%232455c5'/%3E%3Ctext x='32' y='46' text-anchor='middle' fill='white' font-family='sans-serif' font-size='44' font-weight='700'%3EB%3C/text%3E%3C/svg%3E">
+  <script>
+    try { const p = JSON.parse(localStorage.getItem('biology-recalled-v1')); document.documentElement.dataset.theme = p?.progress?.theme === 'dark' || (p?.progress?.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; } catch (_) { document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#dashboard" aria-label="Biology, recalled. Dashboard"><span class="brand-mark" aria-hidden="true">B</span><span>Biology, recalled.</span></a>
+    <a href="#dashboard" class="overview-link">Overview</a>
+    <div class="theme-switch" role="group" aria-label="Colour theme">
+      <button type="button" data-theme-choice="light" aria-pressed="true">Light</button>
+      <span aria-hidden="true">/</span>
+      <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+    </div>
+  </header>
+  <div id="save-warning" class="notice" role="alert" hidden></div>
+  <main id="main" tabindex="-1">
+    <section id="dashboard" class="page dashboard" aria-labelledby="dashboard-title">
+      <div class="dashboard-intro">
+        <div class="intro-copy">
+          <p class="course-label">IGCSE Biology</p>
+          <h1 id="dashboard-title">A little recall.<br>A lot of progress.</h1>
+          <p class="intro-description">Your biology notes, one question at a time.</p>
+          <button type="button" id="continue" class="button primary">Start studying <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="progress-summary">
+          <div class="progress-ring" role="img" aria-label="0 of 21 units complete" id="unit-ring">
+            <svg viewBox="0 0 160 160" aria-hidden="true"><circle class="ring-track" cx="80" cy="80" r="70"></circle><circle class="ring-value" id="ring-value" cx="80" cy="80" r="70" pathLength="100"></circle></svg>
+            <div class="ring-text"><strong id="completed-count">0</strong><span>of 21 units</span></div>
+          </div>
+          <p><strong id="known-count">0</strong> / <span id="total-count">0</span> cards known</p>
+        </div>
+      </div>
+      <section class="unit-library" aria-labelledby="units-title">
+        <div class="library-heading"><h2 id="units-title">Your units</h2><div class="search-field"><label for="unit-search" class="visually-hidden">Search units or topics</label><input id="unit-search" type="search" placeholder="Search units or topics…" autocomplete="off"></div></div>
+        <div class="library-toolbar"><div class="filters" role="group" aria-label="Filter units"><button type="button" data-filter="all" aria-pressed="true">All units</button><button type="button" data-filter="progress" aria-pressed="false">In progress</button><button type="button" data-filter="completed" aria-pressed="false">Completed</button></div><span id="result-count" class="result-count">21 units</span></div>
+        <div id="unit-grid" class="unit-grid"></div>
+        <div id="no-results" class="empty-state" hidden><h3>No units here yet.</h3><p id="no-results-text">Try another search or filter.</p><button type="button" id="clear-filters" class="button secondary">Show all units</button></div>
+      </section>
+    </section>
+    <section id="study" class="page study" aria-labelledby="study-title" hidden>
+      <div class="study-topline"><a href="#dashboard" class="back-link">← All units</a><label class="jump-label" for="unit-jump">Jump to unit <select id="unit-jump"></select></label></div>
+      <div class="study-heading"><div><p id="unit-number" class="course-label"></p><h1 id="study-title"></h1></div><label class="completion-control"><input type="checkbox" id="study-complete"><span>Unit complete</span></label></div>
+      <div class="study-meta"><span id="unit-known"></span><a id="source-link" target="_blank" rel="noopener noreferrer">Source notes ↗</a></div>
+      <div class="bar unit-bar"><span id="study-bar"></span></div>
+      <div class="deck-tools"><span id="card-position"></span><div class="deck-options"><button type="button" id="review-only" class="text-button" aria-pressed="false">Review unknown</button><button type="button" id="shuffle" class="text-button">Shuffle <span aria-hidden="true">↝</span></button></div></div>
+      <div id="card-area">
+        <button type="button" id="flashcard" class="flashcard" aria-pressed="false" aria-label="Reveal answer">
+          <span class="card-rotor" id="card-rotor">
+            <span class="card-face front-face" aria-hidden="true"><span class="card-caption" id="front-caption">Recall</span><span class="card-body" id="front-content"></span><span class="card-cue" id="front-cue">Tap to reveal</span></span>
+            <span class="card-face back-face" aria-hidden="true"><span class="card-caption" id="back-caption">Answer</span><span class="card-body" id="back-content"></span><span class="card-cue">Tap to turn again</span></span>
+          </span>
+        </button>
+        <div class="card-navigation"><button type="button" id="previous" class="button arrow-button" aria-label="Previous card">←</button><button type="button" id="reveal" class="button primary">Reveal answer</button><div class="rating-controls" id="rating-controls" hidden><button type="button" id="again" class="button secondary">Review again <kbd>1</kbd></button><button type="button" id="got-it" class="button primary">Got it <kbd>2</kbd></button></div><button type="button" id="next" class="button arrow-button" aria-label="Next card">→</button></div>
+        <p class="keyboard-hint"><kbd>Space</kbd> to turn <span aria-hidden="true">/</span> <kbd>←</kbd> <kbd>→</kbd> to move</p>
+      </div>
+      <div id="deck-end" class="deck-end" hidden><span class="end-mark" aria-hidden="true">✓</span><h2 id="end-title">A good place to pause.</h2><p id="end-description"></p><div class="end-actions"><button type="button" id="restart" class="button secondary">Review all cards</button><button type="button" id="finish-unit" class="button primary">Mark unit complete</button></div><a href="#dashboard" class="back-link">Return to dashboard →</a></div>
+      <div class="card-index-wrap"><button type="button" class="text-button" id="toggle-index" aria-expanded="false" aria-controls="card-index">Browse cards <span aria-hidden="true">↓</span></button><ol id="card-index" class="card-index" hidden></ol></div>
+    </section>
+  </main>
+  <footer class="site-footer"><div><span class="footer-brand">Biology, recalled.</span><p>Based on your 21 Notion unit summaries.<br>Progress is saved in this browser.</p></div><div class="footer-actions"><button type="button" id="export" class="text-button">Download progress ↗</button><button type="button" id="import" class="text-button">Restore progress</button><input id="import-file" type="file" accept="application/json,.json" hidden><span id="backup-message" role="status"></span></div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div class="visually-hidden" id="card-announcement" aria-live="polite" aria-atomic="true"></div>
+  <noscript><div class="notice">Enable JavaScript to study the cards and save your progress.</div></noscript>
+  <script src="metadata.js"></script>
+  <script src="cards.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
