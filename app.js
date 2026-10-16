@@ -147,6 +147,12 @@ function renderDashboard() {
     link.append(title);
     const bottom = make('div', 'tile-bottom');
     bottom.append(make('span', '', `${known} / ${unit.cards.length} known`));
+    if (GraphLibrary.has(unit.id)) {
+      const graphLink = make('a', 'tile-graph-link', `${GraphLibrary.count(unit.id)} graphs ↗`);
+      graphLink.href = `#graphs-${unit.id}`;
+      graphLink.setAttribute('aria-label', `View graphs for unit ${unit.id}`);
+      bottom.append(graphLink);
+    }
     const label = make('label');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -262,6 +268,8 @@ function setStudyUnit(unit) {
   $('#study-title').textContent = unit.title;
   $('#unit-number').textContent = `Unit ${String(unit.id).padStart(2, '0')}`;
   $('#source-link').href = unit.source;
+  $('#study-graphs-link').hidden = !GraphLibrary.has(unit.id);
+  $('#study-graphs-link').href = `#graphs-${unit.id}`;
   $('#unit-jump').value = String(unit.id);
   $('#card-index').hidden = true;
   $('#toggle-index').setAttribute('aria-expanded', 'false');
@@ -271,13 +279,17 @@ function setStudyUnit(unit) {
 
 function route() {
   cancelFlip();
+  const graphMatch = location.hash.match(/^#graphs(?:-(all|\d+))?$/);
   const match = location.hash.match(/^#unit-(\d+)$/);
   const unit = match ? UNITS.find(item => item.id === Number(match[1])) : null;
-  $('#dashboard').hidden = Boolean(unit);
+  $('#graphs').hidden = !graphMatch;
+  $('#dashboard').hidden = Boolean(unit || graphMatch);
   $('#study').hidden = !unit;
-  $('.overview-link').setAttribute('aria-current', unit ? 'false' : 'page');
-  document.title = unit ? `${unit.id}. ${unit.title} | Biology, recalled.` : 'Biology, recalled.';
-  if (unit) setStudyUnit(unit);
+  $('.overview-link').setAttribute('aria-current', unit || graphMatch ? 'false' : 'page');
+  $('.graph-nav-link').setAttribute('aria-current', graphMatch ? 'page' : 'false');
+  document.title = graphMatch ? 'Graph library | Biology, recalled.' : unit ? `${unit.id}. ${unit.title} | Biology, recalled.` : 'Biology, recalled.';
+  if (graphMatch) { activeUnit = null; GraphLibrary.render(graphMatch[1]); }
+  else if (unit) setStudyUnit(unit);
   else { activeUnit = null; renderDashboard(); }
   $('#main').focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: 'instant' });
