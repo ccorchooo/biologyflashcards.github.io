@@ -4,6 +4,8 @@ A complete offline IGCSE biology study app, based on the 21 unit summaries in yo
 
 The **Graphs** page adds 24 important graph examples across 13 units, with no more than three in any unit. Each graph has a reading guide, an exam reminder and links to the web references checked for its presentation.
 
+Its **Diagrams** view includes 12 downloaded educational images across 8 units: cells, leaf tissues, the digestive system, circulation, heart anatomy, lungs, alveoli, the nephron, the eye, a reflex arc and a flower. Each has a source and licence credit, a focus guide and a revision prompt. Select an image to open an accessible viewer with zoom, scrolling and an image download. All images are bundled for offline use.
+
 ## Run it
 
 Open `index.html` in a modern browser. Keep the files together in this folder. The separate `biology-flashcards.html` edition embeds everything in one file and can also be opened directly.
@@ -25,6 +27,7 @@ python3 -m http.server 8000
 - Space turns a focused card; left/right arrow keys move; 1 selects Review again, 2 selects Got it, and Escape returns to the dashboard. Native controls retain their normal keyboard behaviour.
 - Light/dark buttons save your explicit choice. The initial theme follows the system preference.
 - Choose **Graphs** in the navigation, use the unit selector, or open a unit's graph link from the dashboard or study view. Select **All graph units** to see the full collection. Turn **Show reading guides** off to practise interpreting the figures yourself.
+- Choose **Diagrams** within the Graphs page to browse the images by unit. The first visit opens heart circulation. **All diagram units** shows all 12. Open any diagram to enlarge it, use +/− to zoom from the fitted size to 400%, then scroll or swipe to pan. **Fit**, **Close** and Escape are available; closing restores focus to the image button.
 
 Progress is stored in this browser's local storage, associated with the file or web address. Moving to a different file path, port, browser or device may create a separate progress record. Use **Download progress** and **Restore progress** to transfer it. Restoring a valid backup replaces the current progress. Invalid backups leave it intact. Browser restrictions can prevent storage; the app reports a saving failure and still allows a progress download.
 
@@ -39,6 +42,11 @@ Progress is stored in this browser's local storage, associated with the file or 
 | `graphs-data.js` | All 24 schematic graphs, model curves, reading guides and references |
 | `graphs.js` | Accessible, responsive native-SVG graph renderer and graph navigation |
 | `GRAPH-SOURCES.md` | Graph-by-graph reference list and modelling conventions |
+| `diagrams-data.js` | Diagram metadata, local image paths, prompts and attribution |
+| `diagrams.js` | Diagram unit navigation, image gallery and accessible zoom viewer |
+| `assets/diagrams/` | The 12 downloaded, unmodified educational images |
+| `DIAGRAM-SOURCES.md` | Readable image credits, licence links and provenance |
+| `diagram-sources.json` | Original filenames, download URLs, licences and SHA-256 checksums |
 | `metadata.js` | Unit titles and original Notion source links |
 | `source-manifest.json` | Source-page links and source edit timestamps |
 | `assets/Manrope-Variable.ttf` | Bundled variable font for offline use |
@@ -56,6 +64,8 @@ Each unit links to the Notion summary used for its cards. All 21 summaries were 
 Most units contain 5–10 cards. Coordination and response, reproduction, inheritance, and organisms and their environment contain 15 each because their summaries cover many distinct topics. The cards prioritise definitions, mechanisms, comparisons, practical principles and common exam errors. They are concise revision prompts, not a replacement for the full summaries or practice papers. The source summaries for Units 11 and 19 themselves include material supplemented beyond the original course notes; the flashcards follow those summaries.
 
 The app makes no network requests. The **Source notes** link opens Notion only when clicked and may require your Notion account. No analytics or tracking is included.
+
+Diagram images were found on Wikimedia Commons and downloaded from its image servers. They retain their individual Creative Commons licences or public-domain status; see `DIAGRAM-SOURCES.md`. The app reproduces the downloaded image content unchanged and supplies separate revision guidance. Attribution appears beside every image and in the enlarged viewer. Source and licence links open the web only when clicked. Some textbook diagrams include extension labels; the focus notes identify the relevant IGCSE structures.
 
 ## Graph conventions
 

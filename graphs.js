@@ -228,7 +228,7 @@ const GraphLibrary = (() => {
   function init() {
     if(initialized)return;
     initialized=true;
-    el('#graphs-intro-count').textContent=`${data.length} graphs across ${unitIds.length} units`;
+    el('#graphs-intro-count').textContent=`${data.length} graphs · ${DIAGRAM_LIBRARY_DATA.length} diagrams · available offline`;
     const all=node('option','','All graph units');all.value='all';el('#graph-unit-select').append(all);
     unitIds.forEach(id=>{
       const unit=UNIT_META.find(item=>item.id===id);

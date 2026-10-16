@@ -148,10 +148,16 @@ function renderDashboard() {
     const bottom = make('div', 'tile-bottom');
     bottom.append(make('span', '', `${known} / ${unit.cards.length} known`));
     if (GraphLibrary.has(unit.id)) {
-      const graphLink = make('a', 'tile-graph-link', `${GraphLibrary.count(unit.id)} graphs ↗`);
+      const graphLink = make('a', 'tile-graph-link', `${GraphLibrary.count(unit.id)} ${GraphLibrary.count(unit.id) === 1 ? 'graph' : 'graphs'} ↗`);
       graphLink.href = `#graphs-${unit.id}`;
       graphLink.setAttribute('aria-label', `View graphs for unit ${unit.id}`);
       bottom.append(graphLink);
+    }
+    if (DiagramLibrary.has(unit.id)) {
+      const diagramLink = make('a', 'tile-graph-link', `${DiagramLibrary.count(unit.id)} ${DiagramLibrary.count(unit.id) === 1 ? 'diagram' : 'diagrams'} ↗`);
+      diagramLink.href = `#diagrams-${unit.id}`;
+      diagramLink.setAttribute('aria-label', `View diagrams for unit ${unit.id}`);
+      bottom.append(diagramLink);
     }
     const label = make('label');
     const checkbox = document.createElement('input');
@@ -270,6 +276,11 @@ function setStudyUnit(unit) {
   $('#source-link').href = unit.source;
   $('#study-graphs-link').hidden = !GraphLibrary.has(unit.id);
   $('#study-graphs-link').href = `#graphs-${unit.id}`;
+  if (DiagramLibrary.has(unit.id)) {
+    $('#study-graphs-link').hidden = false;
+    $('#study-graphs-link').textContent = GraphLibrary.has(unit.id) ? 'Graphs & diagrams →' : 'Unit diagrams →';
+    if (!GraphLibrary.has(unit.id)) $('#study-graphs-link').href = `#diagrams-${unit.id}`;
+  } else $('#study-graphs-link').textContent = 'Unit graphs →';
   $('#unit-jump').value = String(unit.id);
   $('#card-index').hidden = true;
   $('#toggle-index').setAttribute('aria-expanded', 'false');
@@ -279,16 +290,26 @@ function setStudyUnit(unit) {
 
 function route() {
   cancelFlip();
+  DiagramLibrary.close();
   const graphMatch = location.hash.match(/^#graphs(?:-(all|\d+))?$/);
+  const diagramMatch = location.hash.match(/^#diagrams(?:-(all|\d+))?$/);
+  const visualMatch = graphMatch || diagramMatch;
   const match = location.hash.match(/^#unit-(\d+)$/);
   const unit = match ? UNITS.find(item => item.id === Number(match[1])) : null;
-  $('#graphs').hidden = !graphMatch;
-  $('#dashboard').hidden = Boolean(unit || graphMatch);
+  $('#graphs').hidden = !visualMatch;
+  $('#graph-panel').hidden = !graphMatch;
+  $('#diagram-panel').hidden = !diagramMatch;
+  $('#dashboard').hidden = Boolean(unit || visualMatch);
   $('#study').hidden = !unit;
-  $('.overview-link').setAttribute('aria-current', unit || graphMatch ? 'false' : 'page');
-  $('.graph-nav-link').setAttribute('aria-current', graphMatch ? 'page' : 'false');
-  document.title = graphMatch ? 'Graph library | Biology, recalled.' : unit ? `${unit.id}. ${unit.title} | Biology, recalled.` : 'Biology, recalled.';
+  $('.overview-link').setAttribute('aria-current', unit || visualMatch ? 'false' : 'page');
+  $('.graph-nav-link').setAttribute('aria-current', visualMatch ? 'page' : 'false');
+  $('#show-graphs').setAttribute('aria-current', graphMatch ? 'page' : 'false');
+  $('#show-diagrams').setAttribute('aria-current', diagramMatch ? 'page' : 'false');
+  $('#show-diagrams').href = graphMatch && DiagramLibrary.has(Number(graphMatch[1])) ? `#diagrams-${graphMatch[1]}` : '#diagrams';
+  $('#show-graphs').href = diagramMatch && GraphLibrary.has(Number(diagramMatch[1])) ? `#graphs-${diagramMatch[1]}` : '#graphs';
+  document.title = visualMatch ? 'Graphs & diagrams | Biology, recalled.' : unit ? `${unit.id}. ${unit.title} | Biology, recalled.` : 'Biology, recalled.';
   if (graphMatch) { activeUnit = null; GraphLibrary.render(graphMatch[1]); }
+  else if (diagramMatch) { activeUnit = null; DiagramLibrary.render(diagramMatch[1]); }
   else if (unit) setStudyUnit(unit);
   else { activeUnit = null; renderDashboard(); }
   $('#main').focus({ preventScroll: true });

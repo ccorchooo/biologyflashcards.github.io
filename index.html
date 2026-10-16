@@ -68,20 +68,37 @@
       <div class="card-index-wrap"><button type="button" class="text-button" id="toggle-index" aria-expanded="false" aria-controls="card-index">Browse cards <span aria-hidden="true">↓</span></button><ol id="card-index" class="card-index" hidden></ol></div>
     </section>
     <section id="graphs" class="page graphs-page" aria-labelledby="graphs-title" hidden>
-      <div class="graphs-intro"><p class="course-label">IGCSE Biology</p><h1 id="graphs-title">Graph library</h1><p>Recognise the pattern. Explain the biology.</p><span id="graphs-intro-count" class="graphs-intro-count"></span></div>
+      <div class="graphs-intro"><p class="course-label">IGCSE Biology</p><h1 id="graphs-title">Graphs &amp; diagrams</h1><p>Recognise the pattern. See how it works.</p><span id="graphs-intro-count" class="graphs-intro-count"></span></div>
+      <nav class="visual-nav" aria-label="Visual library"><a id="show-graphs" href="#graphs" aria-current="page">Graphs <span>24</span></a><a id="show-diagrams" href="#diagrams">Diagrams <span>12</span></a></nav>
+      <div id="graph-panel">
       <div class="graphs-controls"><div class="graph-select-field"><label for="graph-unit-select">Choose a unit</label><select id="graph-unit-select"></select></div><div class="graph-browse-buttons"><button type="button" id="graph-prev" class="button secondary" aria-label="Previous graph unit">←</button><button type="button" id="graph-next" class="button secondary" aria-label="Next graph unit">→</button></div><label class="graph-guides-control"><input type="checkbox" id="graph-guides" checked><span>Show reading guides</span></label></div>
       <div class="graphs-context"><span id="graph-unit-count"></span><p>Original teaching schematics, checked against the linked references. Example values illustrate the pattern.</p></div>
       <div id="graphs-content"></div>
+      </div>
+      <div id="diagram-panel" hidden>
+        <div class="graphs-controls"><div class="graph-select-field"><label for="diagram-unit-select">Choose a unit</label><select id="diagram-unit-select"></select></div><div class="graph-browse-buttons"><button type="button" id="diagram-prev" class="button secondary" aria-label="Previous diagram unit">←</button><button type="button" id="diagram-next" class="button secondary" aria-label="Next diagram unit">→</button></div><p class="diagram-offline-note">All images included offline</p></div>
+        <div class="graphs-context"><span id="diagram-unit-count"></span><p>Explore labelled structures, then explain their function. Select any image to enlarge it.</p></div>
+        <div id="diagrams-content"></div>
+      </div>
     </section>
   </main>
   <footer class="site-footer"><div><span class="footer-brand">Biology, recalled.</span><p>Based on your 21 Notion unit summaries.<br>Progress is saved in this browser.</p></div><div class="footer-actions"><button type="button" id="export" class="text-button">Download progress ↗</button><button type="button" id="import" class="text-button">Restore progress</button><input id="import-file" type="file" accept="application/json,.json" hidden><span id="backup-message" role="status"></span></div></footer>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="visually-hidden" id="card-announcement" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="diagram-viewer" class="diagram-viewer" aria-labelledby="viewer-title" aria-describedby="viewer-hint">
+    <div class="viewer-header"><div><p id="viewer-unit" class="course-label"></p><h2 id="viewer-title"></h2></div><button type="button" id="viewer-close" class="button secondary" autofocus>Close <span aria-hidden="true">×</span></button></div>
+    <div class="viewer-tools"><div class="viewer-zoom" role="group" aria-label="Diagram zoom"><button type="button" id="viewer-minus" aria-label="Zoom out">−</button><output id="viewer-scale" aria-live="polite">Fit</output><button type="button" id="viewer-plus" aria-label="Zoom in">+</button><button type="button" id="viewer-fit">Fit</button></div><a id="viewer-download" class="text-button" download>Save image ↓</a></div>
+    <p id="viewer-hint">Zoom in for small labels. Scroll or swipe to move around the image. Press Escape to close.</p>
+    <div id="viewer-viewport" class="viewer-viewport" tabindex="0" role="region" aria-label="Enlarged diagram; scroll to pan"><img id="viewer-image" alt=""></div>
+    <div id="viewer-credit" class="diagram-credit viewer-credit"></div>
+  </dialog>
   <noscript><div class="notice">Enable JavaScript to study the cards and save your progress.</div></noscript>
   <script src="metadata.js"></script>
   <script src="cards.js"></script>
   <script src="graphs-data.js"></script>
+  <script src="diagrams-data.js"></script>
   <script src="graphs.js"></script>
+  <script src="diagrams.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
